@@ -1,3 +1,4 @@
 .env
 .vscode
 ddns.log
+ddns_cron.log
