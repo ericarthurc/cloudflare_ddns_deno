@@ -6,7 +6,7 @@ import { load } from "https://deno.land/std@0.224.0/dotenv/mod.ts";
 import { SMTPClient } from "https://deno.land/x/denomailer@1.6.0/mod.ts";
 import { format } from "https://deno.land/std@0.91.0/datetime/mod.ts";
 
-const env = await load();
+const env = await load({ envPath: `${import.meta.dirname}/.env` });
 
 type DNSRecord = {
   ip: string;
@@ -110,7 +110,7 @@ async function main() {
 
     if (DNSRecord.ip !== publicIP) {
       await updateCloudflareDNSRecordIP(DNSRecord.id, publicIP);
-      await mailer(publicIP);
+      mailer(publicIP);
       console.log(
         `${format(
           new Date(),
@@ -121,8 +121,7 @@ async function main() {
     }
     console.log(`${format(new Date(), "yyyy-MM-dd HH:mm:ss")} | no change`);
   } catch (error) {
-    console.log(`${format(new Date(), "yyyy-MM-dd HH:mm:ss")} | ${error}`);
-    Deno.exit();
+    throw error;
   }
 }
 await main();
