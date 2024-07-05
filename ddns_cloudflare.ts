@@ -120,8 +120,8 @@ async function main() {
       Deno.exit();
     }
     console.log(`${format(new Date(), "yyyy-MM-dd HH:mm:ss")} | no change`);
-  } catch (_error) {
-    console.log(`${format(new Date(), "yyyy-MM-dd HH:mm:ss")} | script failed`);
+  } catch (error) {
+    console.log(`${format(new Date(), "yyyy-MM-dd HH:mm:ss")} | ${error}`);
     Deno.exit();
   }
 }
