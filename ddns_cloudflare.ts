@@ -1,6 +1,6 @@
 // pheynnx
 // June 25, 2024
-// v0.1
+// v0.2
 
 import { load } from "https://deno.land/std@0.224.0/dotenv/mod.ts";
 import { SMTPClient } from "https://deno.land/x/denomailer@1.6.0/mod.ts";
