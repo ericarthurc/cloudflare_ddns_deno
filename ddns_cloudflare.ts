@@ -62,6 +62,11 @@ async function updateCloudflareDNSRecordIP(
     const res = await fetch(req);
     const data = await res.json();
 
+    // check if cloudflare sent back and failure
+    if (!data.success) {
+      throw new Error();
+    }
+
     return data;
   } catch (error) {
     throw new Error(error);
@@ -71,11 +76,12 @@ async function updateCloudflareDNSRecordIP(
 // Get current public ip address
 async function getPublicIP(): Promise<string> {
   try {
-    const res = await fetch("https://domains.google.com/checkip");
-    return await res.text();
-  } catch (_error) {
+    // const res = await fetch("https://domains.google.com/checkip");
     const res = await fetch("https://api.ipify.org");
-    return await res.text();
+    return (await res.text()).trimEnd();
+  } catch (_error) {
+    const res = await fetch("https://icanhazip.com");
+    return (await res.text()).trimEnd();
   }
 }
 
@@ -110,7 +116,7 @@ async function main() {
 
     if (DNSRecord.ip !== publicIP) {
       await updateCloudflareDNSRecordIP(DNSRecord.id, publicIP);
-      mailer(publicIP);
+      // mailer(publicIP);
       console.log(
         `${format(
           new Date(),
@@ -120,8 +126,8 @@ async function main() {
       Deno.exit();
     }
     console.log(`${format(new Date(), "yyyy-MM-dd HH:mm:ss")} | no change`);
-  } catch (error) {
-    throw error;
+  } catch (_error) {
+    throw new Error("something threw an error, go figure it out");
   }
 }
 await main();
